@@ -227,7 +227,8 @@ proto.envoylight.HelloReply.prototype.toObject = function(opt_includeInstance) {
  */
 proto.envoylight.HelloReply.toObject = function(includeInstance, msg) {
   var f, obj = {
-message: jspb.Message.getFieldWithDefault(msg, 1, "")
+message: jspb.Message.getFieldWithDefault(msg, 1, ""),
+uptime: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -268,6 +269,10 @@ proto.envoylight.HelloReply.deserializeBinaryFromReader = function(msg, reader) 
       var value = /** @type {string} */ (reader.readString());
       msg.setMessage(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUptime(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -304,6 +309,13 @@ proto.envoylight.HelloReply.serializeBinaryToWriter = function(message, writer) 
       f
     );
   }
+  f = message.getUptime();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -322,6 +334,24 @@ proto.envoylight.HelloReply.prototype.getMessage = function() {
  */
 proto.envoylight.HelloReply.prototype.setMessage = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string uptime = 2;
+ * @return {string}
+ */
+proto.envoylight.HelloReply.prototype.getUptime = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.envoylight.HelloReply} returns this
+ */
+proto.envoylight.HelloReply.prototype.setUptime = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

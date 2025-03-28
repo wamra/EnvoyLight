@@ -4,7 +4,7 @@ import { HelloRequest } from './proto/service_pb.js';
 import './App.css';
 
 function App() {
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState({ message: '', uptime: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -22,7 +22,10 @@ function App() {
       
       const metadata = { service: `service${serviceNumber}` };
       const response = await client.sayHello(request, metadata);
-      setResponse(response.getMessage());
+      setResponse({
+        message: response.getMessage(),
+        uptime: response.getUptime()
+      });
     } catch (err) {
       console.error('Error:', err);
       setError(err.message || 'An error occurred');
@@ -45,7 +48,12 @@ function App() {
         </div>
         {loading && <p>Loading...</p>}
         {error && <p className="error">Error: {error}</p>}
-        {response && <p className="response">Response: {response}</p>}
+        {response.message && (
+          <div className="response">
+            <p>Message: {response.message}</p>
+            <p>Uptime: {response.uptime}</p>
+          </div>
+        )}
       </header>
     </div>
   );

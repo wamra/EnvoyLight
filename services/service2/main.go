@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 	"net"
+	"time"
+	"fmt"
 
 	pb "service2/proto"
 	"google.golang.org/grpc"
@@ -12,12 +14,31 @@ import (
 
 type server struct {
 	pb.UnimplementedGreeterServer
+	startTime time.Time
 }
 
 func (s *server) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.HelloReply, error) {
+	uptime := time.Since(s.startTime)
 	return &pb.HelloReply{
 		Message: "I am service 2",
+		Uptime: fmt.Sprintf("Service 2 / uptime: %s", formatDuration(uptime)),
 	}, nil
+}
+
+func formatDuration(d time.Duration) string {
+	d = d.Round(time.Second)
+	h := d / time.Hour
+	d -= h * time.Hour
+	m := d / time.Minute
+	d -= m * time.Minute
+	s := d / time.Second
+	
+	if h > 0 {
+		return fmt.Sprintf("%dh%dm%ds", h, m, s)
+	} else if m > 0 {
+		return fmt.Sprintf("%dm%ds", m, s)
+	}
+	return fmt.Sprintf("%ds", s)
 }
 
 func main() {
@@ -27,7 +48,9 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, &server{})
+	pb.RegisterGreeterServer(s, &server{
+		startTime: time.Now(),
+	})
 	reflection.Register(s)
 
 	log.Printf("Service 2 listening at %v", lis.Addr())
