@@ -74,12 +74,18 @@ npm start
    - "Call Service 1" button will route to the first gRPC service
    - "Call Service 2" button will route to the second gRPC service
 
+![](service1-click.png)
+
+![](service2-click.png)
+
+
 ## Architecture
 
 - Frontend: React application (port 3000)
 - Envoy Proxy: Routes gRPC-Web traffic (port 8080)
 - Service 1: First gRPC service (port 50051)
 - Service 2: Second gRPC service (port 50052)
+
 
 ## How It Works
 
