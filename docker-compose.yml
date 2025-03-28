@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.28-latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
+    command: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml
+    networks:
+      - envoy-network
+
+  service1:
+    build:
+      context: .
+      dockerfile: services/service1/Dockerfile
+    ports:
+      - "50051:50051"
+    networks:
+      - envoy-network
+
+  service2:
+    build:
+      context: .
+      dockerfile: services/service2/Dockerfile
+    ports:
+      - "50052:50052"
+    networks:
+      - envoy-network
+
+networks:
+  envoy-network:
+    driver: bridge 
